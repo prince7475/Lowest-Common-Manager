@@ -1,0 +1,49 @@
+You're given three inputs, all of which are instances of a class 
+that have a "directReports" property pointing to their direct reports. The first input is the top
+manager in an organizational chart (i.e., the only instance that is 
+not anybody else's direct report), and the other two inputs are reports in the organizational
+chart. Write a function that returns the lowest common manager to the two reports.
+Sample input: Node A, Node E, Node I (from the organizational chart below)
+
+
+       A
+      /  \
+     B   C
+    / \ / \
+    D E F G
+  / \
+  H I
+Sample output: Node B
+Time -> O(V * E)
+Space -> O(V)
+
+
+function getLowestCommonManager(topManager, reportOne, reportTwo) {
+  let result = explore(topManager,reportOne,reportTwo)
+  return result.node
+}
+
+function explore(topNode,node1,node2) {
+  let count = 0
+  
+  for(let childNode of topNode.directReports){
+    let result = explore(childNode,node1,node2)
+    if(result.node !== null){
+      return result
+    }else {
+      count += result.count
+    }
+  }
+  let currResult = {node: null, count: count}
+  
+  if(topNode === node1 || topNode === node2){
+    currResult.count++
+  }
+  
+  if(currResult.count === 2){
+    currResult.node = topNode
+  }
+  return currResult
+  
+} // {node: NODE, count: Number}
+

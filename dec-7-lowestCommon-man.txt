@@ -1,0 +1,104 @@
+Lowest Common Manager
+You're given three inputs, all of which are instances of a class that have a 
+"directReports" property pointing to their direct reports. The first input is the top
+manager in an organizational chart (i.e., the only instance that is not anybody 
+else's direct report), and the other two inputs are reports in the organizational
+chart. Write a function that returns the lowest common manager to the two reports.
+
+Sample input: Node A, Node E, Node I (from the organizational chart below)
+     A
+    / \
+    B  C
+   / \ / \
+   D E F G 
+  / \
+  H I
+Sample output: Node B
+
+
+class Managers {
+  constructor(name) {
+    this.name = name
+    this.directReports = []
+  }
+}
+
+main(topNode, node1, node2){
+  let result = explore(topNode, node1,node2) // {node: Managers, count: number}
+  return result.node
+}
+
+function explore(topNode, node1, node2){
+  let count = 0
+  
+  for(let reporter of directReporters){
+    let result = explore(topNode, node1,node2)
+    if(result.node !== null){
+      return result
+    }
+    count += result.count
+  }
+  
+  if(topNode === node1 || topNode === node2){
+    count++
+  }
+  
+  let currResult = {node: null, count: count}
+  if(count === 2){
+    currResult.node = topNode
+  }
+  return currResult
+}
+
+
+
+function getLowestCommonManager(topManager, reportOne, reportTwo) {
+  let result = explore(topManager,reportOne,reportTwo)
+  return result.node
+}
+
+function explore(topNode, node1,node2){
+  let count = 0
+  
+  for(let reporter of topNode.directReports){
+    let result = explore(reporter,node1,node2)
+    if(result.node !== null){
+      return result
+    }else {
+    count+= result.count
+    }
+  }
+  
+  if(topNode === node1 || topNode === node2){
+    count += 1
+  }
+  
+  let currResult = {node: null, count: count}
+  
+  if(count === 2){
+    currResult.node = topNode
+  }
+  return currResult
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
